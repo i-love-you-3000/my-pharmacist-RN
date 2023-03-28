@@ -12,7 +12,7 @@ export default function TabOneScreen() {
 
     if (!permission) {
         // Camera permissions are still loading
-        return <View>Camera permissions are still loading</View>;
+        return <View><Text>Camera permissions are still loading</Text></View>;
     }
 
     if (!permission.granted) {
@@ -31,10 +31,10 @@ export default function TabOneScreen() {
             base64: true,
             exif: false,
         };
-        // if (cameraRef.current) {
-        //     let newPhoto = await cameraRef.current.takePictureAsync(options);
-        //     setPhoto(newPhoto);
-        // }
+        if (cameraRef.current) {
+            let newPhoto = await cameraRef.current.takePictureAsync(options);
+            setPhoto(newPhoto);
+        }
     };
     return (
         <View style={styles.container}>
