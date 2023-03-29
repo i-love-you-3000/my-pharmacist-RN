@@ -1,18 +1,23 @@
 import { StyleSheet } from "react-native";
-import { Button, TouchableOpacity } from "react-native";
+import { Button, TouchableOpacity, Image } from "react-native";
 
 import { Text, View } from "../../components/Themed";
-import { Camera, CameraType } from "expo-camera";
+import { Camera, CameraType, CameraCapturedPicture } from "expo-camera";
 import { useEffect, useRef, useState } from "react";
 
 export default function TabOneScreen() {
-    let cameraRef = useRef(null);
-    const [photo, setPhoto] = useState();
+    let cameraRef = useRef<Camera>(null);
+    const [photo, setPhoto] = useState<CameraCapturedPicture>();
     const [permission, requestPermission] = Camera.useCameraPermissions();
+    const [viewPicture, setViewPicture] = useState(false);
 
     if (!permission) {
         // Camera permissions are still loading
-        return <View><Text>Camera permissions are still loading</Text></View>;
+        return (
+            <View>
+                <Text>Camera permissions are still loading</Text>
+            </View>
+        );
     }
 
     if (!permission.granted) {
@@ -34,17 +39,35 @@ export default function TabOneScreen() {
         if (cameraRef.current) {
             let newPhoto = await cameraRef.current.takePictureAsync(options);
             setPhoto(newPhoto);
+            setViewPicture(true);
         }
     };
     return (
         <View style={styles.container}>
-            <Camera style={styles.camera} type={CameraType.back} ref={cameraRef}>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={takePicture}>
-                        <Text style={styles.text}>사진 찍기</Text>
-                    </TouchableOpacity>
+            {!viewPicture && permission && (
+                <Camera style={styles.camera} type={CameraType.back} ref={cameraRef}>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style={styles.button} onPress={takePicture}>
+                            <Text style={styles.text}>사진 찍기</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Camera>
+            )}
+            {viewPicture && (
+                <View style={styles.imageView}>
+                    <Image source={{ uri: photo && photo.uri }} style={styles.image} />
+                    <View style={styles.reCaptureBtn}>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => {
+                                setViewPicture(false);
+                            }}
+                        >
+                            <Text style={styles.text}>다시 찍기</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </Camera>
+            )}
         </View>
     );
 }
@@ -54,6 +77,9 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     camera: {
+        flex: 1,
+    },
+    flexOne: {
         flex: 1,
     },
     buttonContainer: {
@@ -71,5 +97,19 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "bold",
         color: "white",
+    },
+    imageView: {
+        position: "relative",
+        flex: 1,
+    },
+    image: {
+        flex: 1,
+    },
+    reCaptureBtn: {
+        flexDirection: "row",
+        flex: 1,
+        position: "absolute",
+        backgroundColor: "transparent",
+        margin: 64,
     },
 });
