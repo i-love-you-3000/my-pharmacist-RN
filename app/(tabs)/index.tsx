@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Button, TouchableOpacity, Image } from "react-native";
+import { Button, TouchableOpacity, ImageBackground } from "react-native";
 
 import { Text, View } from "../../components/Themed";
 import { Camera, CameraType, CameraCapturedPicture } from "expo-camera";
@@ -55,17 +55,18 @@ export default function TabOneScreen() {
             )}
             {viewPicture && (
                 <View style={styles.imageView}>
-                    <Image source={{ uri: photo && photo.uri }} style={styles.image} />
-                    <View style={styles.reCaptureBtn}>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => {
-                                setViewPicture(false);
-                            }}
-                        >
-                            <Text style={styles.text}>다시 찍기</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <ImageBackground source={{ uri: photo && photo.uri }} style={styles.image}>
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => {
+                                    setViewPicture(false);
+                                }}
+                            >
+                                <Text style={styles.text}>다시 찍기</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </ImageBackground>
                 </View>
             )}
         </View>
