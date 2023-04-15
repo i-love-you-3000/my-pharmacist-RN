@@ -1,11 +1,16 @@
 import { Stack } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Platform } from "react-native";
+import { useRouter } from "expo-router";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function SignUp() {
+    const router = useRouter();
     const [newID, setNewID] = useState("");
     const [newPW, setNewPW] = useState("");
-
+    const [breakfastTime, setBreakfastTime] = useState(new Date(Date.now()));
+    const [lunchTime, setLunchTime] = useState(new Date(Date.now()));
+    const [dinnerTime, setDinnerTime] = useState(new Date(Date.now()));
     return (
         <>
             <View style={styles.container}>
@@ -14,7 +19,7 @@ export default function SignUp() {
                         title: "회원가입",
                     }}
                 />
-                <Text style={styles.title}>나만의 약사</Text>
+                <Text style={styles.title}>반갑습니다! 😁</Text>
                 <TextInput
                     onChangeText={(e) => setNewID(e)}
                     returnKeyType="done"
@@ -29,12 +34,22 @@ export default function SignUp() {
                     placeholder="비밀번호"
                     style={styles.inputText}
                 ></TextInput>
-                <TouchableOpacity onPress={() => {}} style={styles.loginButton}>
-                    <Text style={styles.buttonText}>로그인</Text>
-                </TouchableOpacity>
+                <View style={styles.time}>
+                    <Text style={styles.timeText}>아침 식사 시간</Text>
+                    <DateTimePicker value={breakfastTime} mode="time" />
+                </View>
+                <View style={styles.time}>
+                    <Text style={styles.timeText}>저심 식사 시간</Text>
+                    <DateTimePicker value={lunchTime} mode="time" />
+                </View>
+                <View style={styles.time}>
+                    <Text style={styles.timeText}>저녁 식사 시간</Text>
+                    <DateTimePicker value={dinnerTime} mode="time" />
+                </View>
+
                 <TouchableOpacity
                     onPress={() => {
-                        router.push("/signup");
+                        router.push("/login");
                     }}
                     style={styles.signupButton}
                 >
@@ -63,7 +78,7 @@ const styles = StyleSheet.create({
     inputText: {
         color: "white",
         fontSize: 18,
-        borderColor: GREEN,
+        borderColor: BLUE,
         borderRadius: 30,
         borderWidth: 1.5,
         paddingVertical: 10,
@@ -92,5 +107,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         fontSize: 18,
         textAlign: "center",
+    },
+    time: {
+        flexDirection: "row",
+        marginBottom: 10,
+        alignItems: "center",
+    },
+    timeText: {
+        color: "white",
+        fontSize: 16,
     },
 });
