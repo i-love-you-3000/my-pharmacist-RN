@@ -1,6 +1,6 @@
 import { Link, Stack } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TextInput, TouchableOpacity,  } from "react-native";
 import { useRouter } from "expo-router";
 
 export default function Login() {
@@ -31,7 +31,7 @@ export default function Login() {
                     placeholder="비밀번호"
                     style={styles.inputText}
                 ></TextInput>
-                <TouchableOpacity onPress={() => {}} style={styles.loginButton}>
+                <TouchableOpacity onPress={() => {router.replace('/home')}}  style={styles.loginButton}>
                     <Text style={styles.buttonText}>로그인</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {router.push('/signup')}} style={styles.signupButton}>

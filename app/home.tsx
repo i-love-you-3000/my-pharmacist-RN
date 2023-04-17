@@ -10,7 +10,7 @@ export default function Home() {
             <View style={styles.container}>
                 <Stack.Screen
                     options={{
-                        title: "Overview",
+                        title: "Home",
                         headerRight: () => (
                             <Link href="/modal" asChild>
                                 <Pressable>
