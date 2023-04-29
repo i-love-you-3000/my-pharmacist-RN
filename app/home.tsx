@@ -12,18 +12,32 @@ export default function Home() {
                     options={{
                         title: "Home",
                         headerRight: () => (
-                            <Link href="/modal" asChild>
-                                <Pressable>
-                                    {({ pressed }) => (
-                                        <FontAwesome
-                                            name="plus"
-                                            size={25}
-                                            color={"white"}
-                                            style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                                        />
-                                    )}
-                                </Pressable>
-                            </Link>
+                            <>
+                                <Link href="/write" asChild>
+                                    <Pressable>
+                                        {({ pressed }) => (
+                                            <FontAwesome
+                                                name="plus"
+                                                size={20}
+                                                color={"white"}
+                                                style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                                            />
+                                        )}
+                                    </Pressable>
+                                </Link>
+                                <Link href="/camera" asChild>
+                                    <Pressable>
+                                        {({ pressed }) => (
+                                            <FontAwesome
+                                                name="camera"
+                                                size={20}
+                                                color={"white"}
+                                                style={{ marginLeft: 10, opacity: pressed ? 0.5 : 1 }}
+                                            />
+                                        )}
+                                    </Pressable>
+                                </Link>
+                            </>
                         ),
                     }}
                 />
