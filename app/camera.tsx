@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Button, TouchableOpacity, ImageBackground, Text, View } from "react-native";
-
+import { Stack } from "expo-router";
 import { Camera, CameraType, CameraCapturedPicture } from "expo-camera";
 import { useRef, useState } from "react";
 
@@ -43,6 +43,11 @@ export default function TabOneScreen() {
     };
     return (
         <View style={styles.container}>
+            <Stack.Screen
+                options={{
+                    title: "촬영으로 약 추가하기",
+                }}
+            />
             {!viewPicture && permission && (
                 <Camera style={styles.camera} type={CameraType.back} ref={cameraRef}>
                     <View style={styles.buttonContainer}>
