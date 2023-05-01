@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable } from "react-native";
+import { Link, Stack, useRouter } from "expo-router";
 import Checkbox from "expo-checkbox";
-import { useRouter, Stack } from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 const GREEN = "#5CBD57";
 const BLUE = "#24B2FF";
 const GREY = "#A2AF9F";
-export default function Write() {
+export default function AddMedicine() {
     const router = useRouter();
     const [medicineName, setMedicineName] = useState("");
     const [beforeMeal, setBeforeMeal] = useState(false);
@@ -24,13 +25,28 @@ export default function Write() {
                 }}
             />
             <View style={styles.container}>
-                <TextInput
-                    onChangeText={(e) => setMedicineName(e)}
-                    returnKeyType="done"
-                    value={medicineName}
-                    placeholder="약 이름"
-                    style={styles.inputText}
-                ></TextInput>
+                <View style={styles.row}>
+                    <TextInput
+                        onChangeText={(e) => setMedicineName(e)}
+                        returnKeyType="done"
+                        value={medicineName}
+                        placeholder="약 이름"
+                        style={styles.inputText}
+                    ></TextInput>
+                    <Link href="/camera" asChild>
+                        <Pressable>
+                            {({ pressed }) => (
+                                <FontAwesome
+                                    name="camera"
+                                    size={20}
+                                    color={"white"}
+                                    style={{ marginLeft: 10, opacity: pressed ? 0.5 : 1, marginBottom: 8 }}
+                                />
+                            )}
+                        </Pressable>
+                    </Link>
+                </View>
+
                 <Text style={styles.title}>복용해야 하는 시간을 선택해주세요.</Text>
                 <View style={styles.row}>
                     <TouchableOpacity

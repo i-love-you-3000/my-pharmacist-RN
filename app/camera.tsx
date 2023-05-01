@@ -1,11 +1,13 @@
 import { StyleSheet } from "react-native";
 import { Button, TouchableOpacity, ImageBackground, Text, View } from "react-native";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { Camera, CameraType, CameraCapturedPicture } from "expo-camera";
 import { useRef, useState } from "react";
+import axios from "axios";
 
 export default function TabOneScreen() {
     let cameraRef = useRef<Camera>(null);
+    const router = useRouter();
     const [photo, setPhoto] = useState<CameraCapturedPicture>();
     const [permission, requestPermission] = Camera.useCameraPermissions();
     const [viewPicture, setViewPicture] = useState(false);
@@ -39,6 +41,17 @@ export default function TabOneScreen() {
             let newPhoto = await cameraRef.current.takePictureAsync(options);
             setPhoto(newPhoto);
             setViewPicture(true);
+            // await axios
+            //     .get("")
+            //     .then((res) => {
+            //         //서버로 부터 약이름 받고
+
+            //         //다시 입력창으로 돌아가기
+            //         router.back();
+            //     })
+            //     .catch((err) => {
+            //         console.log(err);
+            //     });
         }
     };
     return (

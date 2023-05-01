@@ -1,7 +1,5 @@
 import { Link, Stack } from "expo-router";
-import { StyleSheet } from "react-native";
-import { Pressable } from "react-native";
-import { Text, View } from "react-native";
+import { Text, View, Pressable, StyleSheet } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function Home() {
@@ -13,7 +11,7 @@ export default function Home() {
                         title: "Home",
                         headerRight: () => (
                             <>
-                                <Link href="/write" asChild>
+                                <Link href="/add" asChild>
                                     <Pressable>
                                         {({ pressed }) => (
                                             <FontAwesome
@@ -21,18 +19,6 @@ export default function Home() {
                                                 size={20}
                                                 color={"white"}
                                                 style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                                            />
-                                        )}
-                                    </Pressable>
-                                </Link>
-                                <Link href="/camera" asChild>
-                                    <Pressable>
-                                        {({ pressed }) => (
-                                            <FontAwesome
-                                                name="camera"
-                                                size={20}
-                                                color={"white"}
-                                                style={{ marginLeft: 10, opacity: pressed ? 0.5 : 1 }}
                                             />
                                         )}
                                     </Pressable>
