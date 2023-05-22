@@ -4,7 +4,10 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { useColorScheme, Text } from "react-native";
-
+import { createContext } from "react";
+const Context = createContext({
+    medicineName: "Coffee",
+});
 export {
     // Catch any errors thrown by the Layout component.
     ErrorBoundary,
@@ -39,13 +42,13 @@ function RootLayoutNav() {
     const colorScheme = useColorScheme();
 
     return (
-        <>
+        <Context.Provider value={{ medicineName: "coffee" }}>
             <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
                 <Stack>
-                    <Stack.Screen name="index" options={{ headerShown: true  }} />
+                    <Stack.Screen name="index" options={{ headerShown: true }} />
                     <Stack.Screen name="signup" options={{ presentation: "card" }} />
                 </Stack>
             </ThemeProvider>
-        </>
+        </Context.Provider>
     );
 }

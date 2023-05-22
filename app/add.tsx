@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable } from "react-native";
 import { Link, Stack, useRouter } from "expo-router";
 import Checkbox from "expo-checkbox";
@@ -17,11 +17,13 @@ export default function AddMedicine() {
     const [lunch, setLunch] = useState(true);
     const [dinner, setDinner] = useState(true);
     const [manufactureTime, setManufactureTime] = useState(new Date(Date.now()));
+    useEffect(() => {
+    }, []);
     return (
         <>
             <Stack.Screen
                 options={{
-                    title: "직접 약 추가하기",
+                    title: "약 추가하기",
                 }}
             />
             <View style={styles.container}>
