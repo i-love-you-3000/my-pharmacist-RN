@@ -49,7 +49,8 @@ export default function SignUp() {
 
                 <TouchableOpacity
                     onPress={() => {
-                        router.push("/login");
+                        router.back();
+                        // router.push("/login");
                     }}
                     style={styles.signupButton}
                 >

@@ -11,16 +11,6 @@ export default function Home() {
     // },[])
     const medicineList = [
         {
-            medicineName: "어어어어어엄청긴약이름입니다",
-            expiratioDate: "2023.05.12",
-            eatTime: "식후 30분",
-        },
-        {
-            medicineName: "타이레놀",
-            expiratioDate: "2023.05.12",
-            eatTime: "식후 30분",
-        },
-        {
             medicineName: "타이레놀",
             expiratioDate: "2023.05.12",
             eatTime: "식후 30분",
@@ -51,8 +41,8 @@ export default function Home() {
                     }}
                 />
                 <ScrollView style={styles.list}>
-                    {medicineList.map((med) => (
-                        <View style={styles.listItem}>
+                    {medicineList.map((med, index) => (
+                        <View style={styles.listItem} key={index}>
                             <View style={styles.listItemLeft}>
                                 <Text style={styles.medicineName}>{med.medicineName}</Text>
                             </View>
