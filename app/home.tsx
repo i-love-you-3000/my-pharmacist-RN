@@ -1,4 +1,4 @@
-import { Link, Stack, useRouter } from "expo-router";
+import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { Text, View, Pressable, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useEffect, useState } from "react";
@@ -7,11 +7,11 @@ import axios from "axios";
 export default function Home() {
     const router = useRouter();
     const [list, setList] = useState();
-    
+    const params = useLocalSearchParams();
 
-    // useEffect(()=>{
-    //     axios.get()
-    // },[])
+    useEffect(() => {
+        console.log(params); // login ID
+    }, []);
     const medicineList = [
         {
             medicineName: "타이레놀",
