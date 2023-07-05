@@ -1,11 +1,14 @@
-import { Link, Stack } from "expo-router";
-import { Text, View, Pressable, StyleSheet, ScrollView } from "react-native";
+import { Link, Stack, useRouter } from "expo-router";
+import { Text, View, Pressable, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function Home() {
+    const router = useRouter();
     const [list, setList] = useState();
+    
+
     // useEffect(()=>{
     //     axios.get()
     // },[])
@@ -16,6 +19,13 @@ export default function Home() {
             eatTime: "식후 30분",
         },
     ];
+    const goDetail = (drugName: string) => {
+        // router.push("detail");
+        router.push({
+            pathname: "detail",
+            params: { name: drugName },
+        });
+    };
     return (
         <>
             <View style={styles.container}>
@@ -42,7 +52,11 @@ export default function Home() {
                 />
                 <ScrollView style={styles.list}>
                     {medicineList.map((med, index) => (
-                        <View style={styles.listItem} key={index}>
+                        <TouchableOpacity
+                            style={styles.listItem}
+                            key={index}
+                            onPress={() => goDetail(med.medicineName)}
+                        >
                             <View style={styles.listItemLeft}>
                                 <Text style={styles.medicineName}>{med.medicineName}</Text>
                             </View>
@@ -50,7 +64,7 @@ export default function Home() {
                                 <Text style={styles.eatTime}>{med.eatTime}</Text>
                                 <Text style={styles.expiratioDate}>~ {med.expiratioDate}</Text>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     ))}
                 </ScrollView>
             </View>
@@ -88,27 +102,25 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
     listItemLeft: {
-        flex:1,
+        flex: 1,
         justifyContent: "center",
-        flexWrap: 'wrap',
-        alignItems: 'flex-start'
+        flexWrap: "wrap",
+        alignItems: "flex-start",
     },
     listItemRight: {
-        alignItems:'flex-end',
+        alignItems: "flex-end",
     },
     medicineName: {
         color: "white",
         fontSize: 24,
-        
     },
     eatTime: {
         color: "#C6C6C6",
-        marginBottom:5,
-        fontSize: 16
-    },
-    expiratioDate:{
-        color: 'red',
+        marginBottom: 5,
         fontSize: 16,
-    }
-
+    },
+    expiratioDate: {
+        color: "red",
+        fontSize: 16,
+    },
 });
