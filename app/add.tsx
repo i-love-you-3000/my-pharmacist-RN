@@ -140,7 +140,7 @@ export default function AddMedicine() {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.row}>
-                    <Text style={styles.title}>약 제조일자</Text>
+                    <Text style={styles.title}>약 유통기한</Text>
                     <DateTimePicker value={manufactureTime} mode="date" />
                 </View>
 

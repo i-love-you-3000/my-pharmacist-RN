@@ -123,7 +123,7 @@ export default function AddMedicine() {
                     )}
                 </View>
                 <Text style={styles.text}>복용 시작일 : {medicineEatData?.registerDate}</Text>
-                <Text style={styles.expiratioDate}>유통기한 : ~{medicineEatData?.expPeriod}</Text>
+                <Text style={styles.expiratioDate}>유통기한 : {medicineEatData?.expPeriod}</Text>
                 <Image style={styles.image} source={{ uri: medicineInfo?.image }} resizeMode="contain"></Image>
                 <Text style={styles.text}>약 상세정보 : {medicineInfo?.effect}</Text>
             </ScrollView>
