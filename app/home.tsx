@@ -4,26 +4,67 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+type MedicineEatData = {
+    itemSeq: string; // "202002585",
+    registerDate: string; // "등록날짜",
+    itemName: string;
+    breakfast: true | false;
+    lunch: true | false;
+    dinner: true | false;
+    baw: "B" | "A" | "W"; //"B 식전" | "A 식후" | "W 식중"
+    intakePeriod: number; // 8,
+    expPeriod: string; // "2023/07/05"
+};
+
+const testData: MedicineEatData[] = [
+    {
+        itemSeq: "202002585",
+        registerDate: "2023/07/05",
+        itemName: "약이름",
+        breakfast: true,
+        lunch: true,
+        dinner: true,
+        baw: "B",
+        intakePeriod: 8,
+        expPeriod: "2023/07/05",
+    },
+    {
+        itemSeq: "202002585",
+        registerDate: "2023/07/05",
+        itemName: "약이름",
+        breakfast: true,
+        lunch: true,
+        dinner: true,
+        baw: "B",
+        intakePeriod: 8,
+        expPeriod: "2023/07/05",
+    },
+];
+
 export default function Home() {
     const router = useRouter();
-    const [list, setList] = useState();
+    const [list, setList] = useState<MedicineEatData[]>();
     const params = useLocalSearchParams();
-
+    const getMedList = async () => {
+        await axios
+            .get("http://localhost:포트번호/app/prescription/", { params: params.id })
+            .then((res) => {
+                setList(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
     useEffect(() => {
         console.log(params); // login ID
+        // getMedList();
+        setList(testData);
     }, []);
-    const medicineList = [
-        {
-            medicineName: "타이레놀",
-            expiratioDate: "2023.05.12",
-            eatTime: "식후 30분",
-        },
-    ];
-    const goDetail = (drugName: string) => {
+    const goDetail = (itemSeq: string, registerData: string) => {
         // router.push("detail");
         router.push({
             pathname: "detail",
-            params: { name: drugName },
+            params: { id: params.id, itemSeq, registerData },
         });
     };
     return (
@@ -33,36 +74,46 @@ export default function Home() {
                     options={{
                         title: "복용중인 약",
                         headerRight: () => (
-                            <>
-                                <Link href="/add" asChild>
-                                    <Pressable>
-                                        {({ pressed }) => (
-                                            <FontAwesome
-                                                name="plus"
-                                                size={20}
-                                                color={"white"}
-                                                style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                                            />
-                                        )}
-                                    </Pressable>
-                                </Link>
-                            </>
+                            <Link href="/add" asChild>
+                                <Pressable>
+                                    {({ pressed }) => (
+                                        <FontAwesome
+                                            name="plus"
+                                            size={20}
+                                            color={"white"}
+                                            style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                                        />
+                                    )}
+                                </Pressable>
+                            </Link>
                         ),
                     }}
                 />
                 <ScrollView style={styles.list}>
-                    {medicineList.map((med, index) => (
+                    {list?.map((med, index) => (
                         <TouchableOpacity
                             style={styles.listItem}
                             key={index}
-                            onPress={() => goDetail(med.medicineName)}
+                            onPress={() => goDetail(med.itemSeq, med.registerDate)}
                         >
                             <View style={styles.listItemLeft}>
-                                <Text style={styles.medicineName}>{med.medicineName}</Text>
+                                <Text style={styles.medicineName}>{med.itemName}</Text>
                             </View>
                             <View style={styles.listItemRight}>
-                                <Text style={styles.eatTime}>{med.eatTime}</Text>
-                                <Text style={styles.expiratioDate}>~ {med.expiratioDate}</Text>
+                                <View style={styles.eatTimeContainer}>
+                                    {med.breakfast ? <Text style={styles.eatTime}>아침</Text> : null}
+                                    {med.lunch ? <Text style={styles.eatTime}>점심</Text> : null}
+                                    {med.dinner ? <Text style={styles.eatTime}>저녁</Text> : null}
+                                    {med.baw === "B" ? (
+                                        <Text style={styles.eatTimeBAW}>식전</Text>
+                                    ) : med.baw === "A" ? (
+                                        <Text style={styles.eatTimeBAW}>식전</Text>
+                                    ) : (
+                                        <Text style={styles.eatTimeBAW}>식중</Text>
+                                    )}
+                                </View>
+                                <Text style={styles.registerDate}>복용 시작일 : {med.registerDate}</Text>
+                                <Text style={styles.expiratioDate}>유통기한 : {med.expPeriod}</Text>
                             </View>
                         </TouchableOpacity>
                     ))}
@@ -115,12 +166,27 @@ const styles = StyleSheet.create({
         fontSize: 24,
     },
     eatTime: {
-        color: "#C6C6C6",
+        color: "#5CBD57",
+        marginRight: 5,
+        fontWeight: "bold",
+        fontSize: 16,
+    },
+    eatTimeBAW: {
+        color: "white",
         marginBottom: 5,
         fontSize: 16,
     },
     expiratioDate: {
         color: "red",
-        fontSize: 16,
+        fontSize: 14,
+    },
+    eatTimeContainer: {
+        flexDirection: "row",
+        marginBottom: 1,
+    },
+    registerDate: {
+        color: "white",
+        fontSize: 14,
+        marginBottom: 3,
     },
 });

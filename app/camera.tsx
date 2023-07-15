@@ -39,6 +39,8 @@ export default function TabOneScreen() {
         };
         if (cameraRef.current) {
             let newPhoto = await cameraRef.current.takePictureAsync(options);
+            console.log(newPhoto);
+            
             setPhoto(newPhoto);
             setViewPicture(true);
             // await axios
