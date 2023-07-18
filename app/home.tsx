@@ -87,6 +87,22 @@ export default function Home() {
                                 </Pressable>
                             </Link>
                         ),
+                        headerLeft: () => (
+                            <Pressable
+                                onPress={() => {
+                                    router.replace("/");
+                                }}
+                            >
+                                {({ pressed }) => (
+                                    <FontAwesome
+                                        name="sign-out"
+                                        size={20}
+                                        color={"white"}
+                                        style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                                    />
+                                )}
+                            </Pressable>
+                        ),
                     }}
                 />
                 <ScrollView style={styles.list}>

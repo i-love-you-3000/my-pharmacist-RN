@@ -50,7 +50,7 @@ export default function AddMedicine() {
     const [medicineEatData, setMedicineEatData] = useState<MedicineEatData>();
     const [medicineInfo, setMedicineInfo] = useState<MedicineInfo>();
     const { medicineNameFromCamera, setMedicineNameFromCamera } = useContext(medicineNameContext);
-    
+
     const getMedicineInfo = async () => {
         await axios
             .get("http://localhost:포트번호/app/medicine", {
@@ -81,6 +81,18 @@ export default function AddMedicine() {
                 console.log(err);
             });
     };
+    const deleteMedicine = async () => {
+        await axios
+            .delete("http://localhost:포트번호/app/prescription/", {
+                params: { id: params.id, itemSeq: params.itemSeq, registerDate: params.registerDate },
+            })
+            .then((res) => {
+                if (res.data.response) {
+                    router.back();
+                }
+            })
+            .catch((err) => console.log(err));
+    };
     useEffect(() => {
         console.log(params);
         // getMedicineInfo();
@@ -95,24 +107,40 @@ export default function AddMedicine() {
                 options={{
                     title: "약 상세정보",
                     headerRight: () => (
-                        <Link
-                            href={{
-                                pathname: "/update",
-                                params: { id: params.id, itemSeq: params.itemSeq, registerDate: params.registerDate },
-                            }}
-                            asChild
-                        >
-                            <Pressable>
+                        <View style={styles.row}>
+                            <Link
+                                href={{
+                                    pathname: "/update",
+                                    params: {
+                                        id: params.id,
+                                        itemSeq: params.itemSeq,
+                                        registerDate: params.registerDate,
+                                    },
+                                }}
+                                asChild
+                            >
+                                <Pressable>
+                                    {({ pressed }) => (
+                                        <FontAwesome
+                                            name="edit"
+                                            size={20}
+                                            color={"white"}
+                                            style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                                        />
+                                    )}
+                                </Pressable>
+                            </Link>
+                            <Pressable onPress={deleteMedicine}>
                                 {({ pressed }) => (
                                     <FontAwesome
-                                        name="edit"
+                                        name="trash"
                                         size={20}
                                         color={"white"}
                                         style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                                     />
                                 )}
                             </Pressable>
-                        </Link>
+                        </View>
                     ),
                 }}
             />
@@ -185,5 +213,8 @@ const styles = StyleSheet.create({
         height: 200,
         alignSelf: "center",
         marginBottom: 5,
+    },
+    row: {
+        flexDirection: "row",
     },
 });

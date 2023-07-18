@@ -2,12 +2,25 @@ import { Link, Stack } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import axios from "axios";
 
 export default function Login() {
     const router = useRouter();
     const [loginID, setLoginID] = useState("");
     const [loginPW, setLoginPW] = useState("");
-
+    const getLogin = async () => {
+        router.replace({ pathname: "/home", params: { id: loginID } });
+        await axios
+            .get("http://localhost:포트번호/app/users/login", { params: { id: loginID, pw: loginPW } })
+            .then((res) => {
+                if (res.data.response) {
+                    router.replace({ pathname: "/home", params: { id: loginID } });
+                } else {
+                    alert("다시 시도해주세요.");
+                }
+            })
+            .catch((err) => console.log(err));
+    };
     return (
         <>
             <View style={styles.container}>
@@ -33,7 +46,7 @@ export default function Login() {
                 ></TextInput>
                 <TouchableOpacity
                     onPress={() => {
-                        router.replace({ pathname: "/home", params: { id: loginID } });
+                        getLogin();
                     }}
                     style={styles.loginButton}
                 >

@@ -8,9 +8,9 @@ export default function SignUp() {
     const router = useRouter();
     const [newID, setNewID] = useState("");
     const [newPW, setNewPW] = useState("");
-    const [breakfastTime, setBreakfastTime] = useState(new Date(Date.now()));
-    const [lunchTime, setLunchTime] = useState(new Date(Date.now()));
-    const [dinnerTime, setDinnerTime] = useState(new Date(Date.now()));
+    const [breakfastTime, setBreakfastTime] = useState(new Date(`1970-01-01T08:00:00`));
+    const [lunchTime, setLunchTime] = useState(new Date(`1970-01-01T12:00:00`));
+    const [dinnerTime, setDinnerTime] = useState(new Date(`1970-01-01T18:00:00`));
     return (
         <>
             <View style={styles.container}>
@@ -36,15 +36,33 @@ export default function SignUp() {
                 ></TextInput>
                 <View style={styles.time}>
                     <Text style={styles.timeText}>아침 식사 시간</Text>
-                    <DateTimePicker value={breakfastTime} mode="time" />
+                    <DateTimePicker
+                        value={breakfastTime}
+                        mode="time"
+                        onChange={(e, date) => {
+                            date && setBreakfastTime(date);
+                        }}
+                    />
                 </View>
                 <View style={styles.time}>
-                    <Text style={styles.timeText}>저심 식사 시간</Text>
-                    <DateTimePicker value={lunchTime} mode="time" />
+                    <Text style={styles.timeText}>점심 식사 시간</Text>
+                    <DateTimePicker
+                        value={lunchTime}
+                        mode="time"
+                        onChange={(e, date) => {
+                            date && setLunchTime(date);
+                        }}
+                    />
                 </View>
                 <View style={styles.time}>
                     <Text style={styles.timeText}>저녁 식사 시간</Text>
-                    <DateTimePicker value={dinnerTime} mode="time" />
+                    <DateTimePicker
+                        value={dinnerTime}
+                        mode="time"
+                        onChange={(e, date) => {
+                            date && setDinnerTime(date);
+                        }}
+                    />
                 </View>
 
                 <TouchableOpacity
