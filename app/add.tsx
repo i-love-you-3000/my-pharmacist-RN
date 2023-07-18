@@ -4,7 +4,7 @@ import { Link, Stack, useRouter } from "expo-router";
 import Checkbox from "expo-checkbox";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-
+import medicineNameContext from "../components/context";
 const GREEN = "#5CBD57";
 const BLUE = "#24B2FF";
 const GREY = "#A2AF9F";
@@ -17,7 +17,13 @@ export default function AddMedicine() {
     const [lunch, setLunch] = useState(true);
     const [dinner, setDinner] = useState(true);
     const [manufactureTime, setManufactureTime] = useState(new Date(Date.now()));
-    useEffect(() => {}, []);
+    const { medicineNameFromCamera, setMedicineNameFromCamera } = useContext(medicineNameContext);
+    useEffect(() => {
+        medicineNameFromCamera && setMedicineName(medicineNameFromCamera);
+    }, [medicineNameFromCamera]);
+    useEffect(() => {
+        setMedicineName("");
+    }, []);
     return (
         <>
             <Stack.Screen

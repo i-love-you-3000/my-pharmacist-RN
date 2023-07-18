@@ -2,12 +2,11 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useColorScheme, Text } from "react-native";
 import { createContext } from "react";
-const Context = createContext({
-    medicineName: "Coffee",
-});
+import medicineNameContext from "../components/context";
+
 export {
     // Catch any errors thrown by the Layout component.
     ErrorBoundary,
@@ -40,15 +39,15 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
     const colorScheme = useColorScheme();
-
+    const [medicineNameFromCamera, setMedicineNameFromCamera] = useState<string>();
     return (
-        <Context.Provider value={{ medicineName: "coffee" }}>
+        <medicineNameContext.Provider value={{ medicineNameFromCamera, setMedicineNameFromCamera }}>
             <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
                 <Stack>
                     <Stack.Screen name="index" options={{ headerShown: true }} />
                     <Stack.Screen name="signup" options={{ presentation: "card" }} />
                 </Stack>
             </ThemeProvider>
-        </Context.Provider>
+        </medicineNameContext.Provider>
     );
 }

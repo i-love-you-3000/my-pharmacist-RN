@@ -2,7 +2,8 @@ import { StyleSheet } from "react-native";
 import { Button, TouchableOpacity, ImageBackground, Text, View } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { Camera, CameraType, CameraCapturedPicture } from "expo-camera";
-import { useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import medicineNameContext from "../components/context";
 import axios from "axios";
 
 export default function TabOneScreen() {
@@ -11,6 +12,7 @@ export default function TabOneScreen() {
     const [photo, setPhoto] = useState<CameraCapturedPicture>();
     const [permission, requestPermission] = Camera.useCameraPermissions();
     const [viewPicture, setViewPicture] = useState(false);
+    const { medicineNameFromCamera, setMedicineNameFromCamera } = useContext(medicineNameContext);
 
     if (!permission) {
         // Camera permissions are still loading
@@ -39,10 +41,12 @@ export default function TabOneScreen() {
         };
         if (cameraRef.current) {
             let newPhoto = await cameraRef.current.takePictureAsync(options);
-            console.log(newPhoto);
-            
+            // console.log(newPhoto);
+
             setPhoto(newPhoto);
             setViewPicture(true);
+
+            setMedicineNameFromCamera(medicineNameFromCamera + "2");
             // await axios
             //     .get("")
             //     .then((res) => {
@@ -56,6 +60,9 @@ export default function TabOneScreen() {
             //     });
         }
     };
+    useEffect(() => {
+        setMedicineNameFromCamera("");
+    }, []);
     return (
         <View style={styles.container}>
             <Stack.Screen

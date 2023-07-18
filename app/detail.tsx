@@ -4,6 +4,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Stack, useRouter, useLocalSearchParams } from "expo-router";
 // import { Image } from "expo-image";
 import axios from "axios";
+import medicineNameContext from "../components/context";
 
 type MedicineEatData = {
     itemSeq: string; // "202002585",
@@ -48,6 +49,8 @@ export default function AddMedicine() {
     const params = useLocalSearchParams();
     const [medicineEatData, setMedicineEatData] = useState<MedicineEatData>();
     const [medicineInfo, setMedicineInfo] = useState<MedicineInfo>();
+    const { medicineNameFromCamera, setMedicineNameFromCamera } = useContext(medicineNameContext);
+    
     const getMedicineInfo = async () => {
         await axios
             .get("http://localhost:포트번호/app/medicine", {
@@ -84,7 +87,8 @@ export default function AddMedicine() {
         // getMedicineEatData();
         setMedicineEatData(testEatData);
         setMedicineInfo(testInfo);
-    }, [testInfo]);
+        setMedicineNameFromCamera("");
+    }, []);
     return (
         <>
             <Stack.Screen
