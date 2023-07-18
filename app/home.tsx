@@ -90,12 +90,12 @@ export default function Home() {
                         headerLeft: () => (
                             <Pressable
                                 onPress={() => {
-                                    router.replace("/");
+                                    router.push("/user");
                                 }}
                             >
                                 {({ pressed }) => (
                                     <FontAwesome
-                                        name="sign-out"
+                                        name="user-circle-o"
                                         size={20}
                                         color={"white"}
                                         style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}

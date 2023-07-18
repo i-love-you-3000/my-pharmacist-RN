@@ -7,16 +7,12 @@ import axios from "axios";
 
 export default function SignUp() {
     const router = useRouter();
-    const [newID, setNewID] = useState("");
-    const [newPW, setNewPW] = useState("");
     const [breakfastTime, setBreakfastTime] = useState(new Date(`1970-01-01T08:00:00`));
     const [lunchTime, setLunchTime] = useState(new Date(`1970-01-01T12:00:00`));
     const [dinnerTime, setDinnerTime] = useState(new Date(`1970-01-01T18:00:00`));
     const getSignIp = async () => {
         await axios
-            .post("http://localhost:{포트번호}/app/users/register", {
-                id: newID,
-                pw: newPW,
+            .post("", {
                 breakfast: breakfastTime,
                 lunch: lunchTime,
                 dinner: dinnerTime,
@@ -31,24 +27,10 @@ export default function SignUp() {
             <View style={styles.container}>
                 <Stack.Screen
                     options={{
-                        title: "회원가입",
+                        title: "정보 수정",
                     }}
                 />
-                <Text style={styles.title}>반갑습니다! 😁</Text>
-                <TextInput
-                    onChangeText={(e) => setNewID(e)}
-                    returnKeyType="done"
-                    value={newID}
-                    placeholder="아이디"
-                    style={styles.inputText}
-                ></TextInput>
-                <TextInput
-                    onChangeText={(e) => setNewPW(e)}
-                    returnKeyType="done"
-                    value={newPW}
-                    placeholder="비밀번호"
-                    style={styles.inputText}
-                ></TextInput>
+                <Text style={styles.title}>바뀐 식사 시간{`\n`}입력해주세요~</Text>
                 <View style={styles.time}>
                     <Text style={styles.timeText}>아침 식사 시간</Text>
                     <DateTimePicker
@@ -88,7 +70,15 @@ export default function SignUp() {
                     }}
                     style={styles.signupButton}
                 >
-                    <Text style={styles.buttonText}>회원가입</Text>
+                    <Text style={styles.buttonText}>수정</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        router.replace("/");
+                    }}
+                    style={styles.logoutButton}
+                >
+                    <Text style={styles.buttonText}>로그아웃</Text>
                 </TouchableOpacity>
             </View>
         </>
@@ -97,6 +87,7 @@ export default function SignUp() {
 
 const GREEN = "#5CBD57";
 const BLUE = "#24B2FF";
+const RED = "#FF738A";
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -109,6 +100,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "white",
         marginBottom: 30,
+        textAlign: "center",
     },
     inputText: {
         color: "white",
@@ -130,12 +122,20 @@ const styles = StyleSheet.create({
         backgroundColor: GREEN,
     },
     signupButton: {
-        marginVertical: 20,
+        marginTop: 20,
         width: "30%",
         borderRadius: 30,
         borderWidth: 1.5,
         borderColor: BLUE,
         backgroundColor: BLUE,
+    },
+    logoutButton: {
+        marginVertical: 20,
+        width: "30%",
+        borderRadius: 30,
+        borderWidth: 1.5,
+        borderColor: RED,
+        backgroundColor: RED,
     },
     buttonText: {
         paddingVertical: 10,
