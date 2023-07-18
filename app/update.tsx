@@ -1,13 +1,25 @@
 import { useEffect, useState, useContext } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable } from "react-native";
-import { Link, Stack, useRouter } from "expo-router";
+import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import Checkbox from "expo-checkbox";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import axios from "axios";
 
 const GREEN = "#5CBD57";
 const BLUE = "#24B2FF";
 const GREY = "#A2AF9F";
+type MedicineEatData = {
+    itemSeq: string; // "202002585",
+    registerDate: string; // "등록날짜",
+    itemName: string;
+    breakfast: true | false;
+    lunch: true | false;
+    dinner: true | false;
+    baw: "B" | "A" | "W"; //"B 식전" | "A 식후" | "W 식중"
+    intakePeriod: number; // 8,
+    expPeriod: string; // "2023/07/05"
+};
 export default function AddMedicine() {
     const router = useRouter();
     const [medicineName, setMedicineName] = useState("");
@@ -17,12 +29,38 @@ export default function AddMedicine() {
     const [lunch, setLunch] = useState(true);
     const [dinner, setDinner] = useState(true);
     const [manufactureTime, setManufactureTime] = useState(new Date(Date.now()));
-    useEffect(() => {}, []);
+    const params = useLocalSearchParams();
+    const getMedicineInfo = async () => {
+        // await axios
+        //     .get("http://localhost:포트번호/app/prescription/", { params: { id: params.id, itemSeq:params.itemSeq, registerDate:params.registerDate } })
+        //     .then((res) => {})
+        //     .catch((err) => console.log(err));
+        const testEatData: MedicineEatData = {
+            itemSeq: "202002585",
+            registerDate: "2023/07/05",
+            itemName: "약이름",
+            breakfast: true,
+            lunch: true,
+            dinner: true,
+            baw: "B",
+            intakePeriod: 8,
+            expPeriod: "2023-07-05",
+        };
+        setMedicineName(testEatData.itemName);
+        setBreakfast(testEatData.breakfast);
+        setLunch(testEatData.lunch);
+        setDinner(testEatData.dinner);
+        testEatData.baw === "A" ? setBeforeMeal(true) : setAfterMeal(true);
+        setManufactureTime(new Date(testEatData.expPeriod))
+    };
+    useEffect(() => {
+        getMedicineInfo();
+    }, []);
     return (
         <>
             <Stack.Screen
                 options={{
-                    title: "약 추가하기",
+                    title: "수정하기",
                 }}
             />
             <View style={styles.container}>
@@ -155,7 +193,7 @@ export default function AddMedicine() {
                     }}
                     style={styles.Button}
                 >
-                    <Text style={styles.buttonText}>추가</Text>
+                    <Text style={styles.buttonText}>수정</Text>
                 </TouchableOpacity>
             </View>
         </>

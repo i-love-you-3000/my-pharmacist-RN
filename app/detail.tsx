@@ -91,7 +91,13 @@ export default function AddMedicine() {
                 options={{
                     title: "약 상세정보",
                     headerRight: () => (
-                        <Link href="/add" asChild>
+                        <Link
+                            href={{
+                                pathname: "/update",
+                                params: { id: params.id, itemSeq: params.itemSeq, registerDate: params.registerDate },
+                            }}
+                            asChild
+                        >
                             <Pressable>
                                 {({ pressed }) => (
                                     <FontAwesome
