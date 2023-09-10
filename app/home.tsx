@@ -1,8 +1,9 @@
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { Text, View, Pressable, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { Text, View, Pressable, StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import messaging from '@react-native-firebase/messaging';
 
 type MedicineEatData = {
     itemSeq: string; // "202002585",
@@ -55,11 +56,20 @@ export default function Home() {
                 console.log(err);
             });
     };
+    
+    useEffect(() => {
+        const unsubscribe = messaging().onMessage(async remoteMessage => {
+            Alert.alert('약 복용 시간입니다', JSON.stringify(remoteMessage));
+        });
+        return unsubscribe;
+    }, []);
+
     useEffect(() => {
         console.log(params); // login ID
         // getMedList();
         setList(testData);
     }, []);
+    
     const goDetail = (itemSeq: string, registerData: string) => {
         // router.push("detail");
         router.push({
@@ -67,6 +77,7 @@ export default function Home() {
             params: { id: params.id, itemSeq, registerData },
         });
     };
+    
     return (
         <>
             <View style={styles.container}>

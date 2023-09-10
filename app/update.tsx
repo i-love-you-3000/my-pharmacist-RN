@@ -1,15 +1,17 @@
 import { useEffect, useState, useContext } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable } from "react-native";
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable, Alert } from "react-native";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import Checkbox from "expo-checkbox";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import axios from "axios";
 import medicineNameContext from "../components/context";
+import messaging from '@react-native-firebase/messaging';
 
 const GREEN = "#5CBD57";
 const BLUE = "#24B2FF";
 const GREY = "#A2AF9F";
+
 type MedicineEatData = {
     itemSeq: string; // "202002585",
     registerDate: string; // "등록날짜",
@@ -21,6 +23,7 @@ type MedicineEatData = {
     intakePeriod: number; // 8,
     expPeriod: string; // "2023/07/05"
 };
+
 export default function AddMedicine() {
     const router = useRouter();
     const [medicineName, setMedicineName] = useState("");
@@ -56,10 +59,19 @@ export default function AddMedicine() {
         testEatData.baw === "A" ? setBeforeMeal(true) : setAfterMeal(true);
         setManufactureTime(new Date(testEatData.expPeriod));
     };
+    
+    useEffect(() => {
+        const unsubscribe = messaging().onMessage(async remoteMessage => {
+            Alert.alert('약 복용 시간입니다', JSON.stringify(remoteMessage));
+        });
+        return unsubscribe;
+    }, []);
+    
     useEffect(() => {
         console.log("Context");
         medicineNameFromCamera && setMedicineName(medicineNameFromCamera);
     }, [medicineNameFromCamera]);
+
     useEffect(() => {
         setMedicineName("");
         getMedicineInfo();

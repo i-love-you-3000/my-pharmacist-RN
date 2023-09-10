@@ -1,10 +1,11 @@
 import { useEffect, useState, useContext } from "react";
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Pressable, Image } from "react-native";
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Pressable, Image, Alert } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Stack, useRouter, useLocalSearchParams } from "expo-router";
 // import { Image } from "expo-image";
 import axios from "axios";
 import medicineNameContext from "../components/context";
+import messaging from '@react-native-firebase/messaging';
 
 type MedicineEatData = {
     itemSeq: string; // "202002585",
@@ -24,12 +25,14 @@ type MedicineInfo = {
     effect: string;
     image: string;
 };
+
 const testInfo: MedicineInfo = {
     item_seq: "itemSeq",
     item_name: "itemName",
     effect: "effect",
     image: "https://picsum.photos/600/400",
 };
+
 const testEatData: MedicineEatData = {
     itemSeq: "202002585",
     registerDate: "2023/07/05",
@@ -41,9 +44,11 @@ const testEatData: MedicineEatData = {
     intakePeriod: 8,
     expPeriod: "2023/07/05",
 };
+
 const GREEN = "#5CBD57";
 const BLUE = "#24B2FF";
 const GREY = "#A2AF9F";
+
 export default function AddMedicine() {
     const router = useRouter();
     const params = useLocalSearchParams();
@@ -65,6 +70,7 @@ export default function AddMedicine() {
                 console.log(err);
             });
     };
+
     const getMedicineEatData = async () => {
         await axios
             .get("http://localhost:포트번호/app/prescription/detail", {
@@ -81,6 +87,7 @@ export default function AddMedicine() {
                 console.log(err);
             });
     };
+
     const deleteMedicine = async () => {
         await axios
             .delete("http://localhost:포트번호/app/prescription/", {
@@ -93,6 +100,14 @@ export default function AddMedicine() {
             })
             .catch((err) => console.log(err));
     };
+
+    useEffect(() => {
+        const unsubscribe = messaging().onMessage(async remoteMessage => {
+            Alert.alert('약 복용 시간입니다', JSON.stringify(remoteMessage));
+        });
+        return unsubscribe;
+    }, []);
+
     useEffect(() => {
         console.log(params);
         // getMedicineInfo();
@@ -101,6 +116,7 @@ export default function AddMedicine() {
         setMedicineInfo(testInfo);
         setMedicineNameFromCamera("");
     }, []);
+
     return (
         <>
             <Stack.Screen
