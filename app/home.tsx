@@ -42,9 +42,9 @@ const testData: MedicineEatData[] = [
 ];
 
 export default function Home() {
-    const router = useRouter();
     const [list, setList] = useState<MedicineEatData[]>();
     const params = useLocalSearchParams();
+    const router = useRouter();
     const getMedList = async () => {
         await axios
             .get("http://localhost:포트번호/app/prescription/", { params: params.id })
@@ -61,9 +61,9 @@ export default function Home() {
         setList(testData);
     }, []);
     const goDetail = (itemSeq: string, registerData: string) => {
-        // router.push("detail");
+        router.setParams({});
         router.push({
-            pathname: "detail",
+            pathname: "/detail",
             params: { id: params.id, itemSeq, registerData },
         });
     };

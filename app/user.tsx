@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Platform } from "react-native";
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Platform, Button } from "react-native";
 import { useRouter } from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import axios from "axios";
@@ -10,6 +10,9 @@ export default function SignUp() {
     const [breakfastTime, setBreakfastTime] = useState(new Date(`1970-01-01T08:00:00`));
     const [lunchTime, setLunchTime] = useState(new Date(`1970-01-01T12:00:00`));
     const [dinnerTime, setDinnerTime] = useState(new Date(`1970-01-01T18:00:00`));
+    const [breakfasteTimePicker, setBreakfastTimePicker] = useState(false);
+    const [lunchTimePicker, setLunchTimePicker] = useState(false);
+    const [dinnerTimePicker, setDinnerTimePicker] = useState(false);
     const getSignIp = async () => {
         await axios
             .post("", {
@@ -33,33 +36,84 @@ export default function SignUp() {
                 <Text style={styles.title}>바뀐 식사 시간{`\n`}입력해주세요~</Text>
                 <View style={styles.time}>
                     <Text style={styles.timeText}>아침 식사 시간</Text>
-                    <DateTimePicker
-                        value={breakfastTime}
-                        mode="time"
-                        onChange={(e, date) => {
-                            date && setBreakfastTime(date);
-                        }}
-                    />
+                    {Platform.OS === "ios" && (
+                        <DateTimePicker
+                            value={breakfastTime}
+                            mode="time"
+                            onChange={(e, date) => {
+                                date && setBreakfastTime(date);
+                            }}
+                        />
+                    )}
+                    {Platform.OS === "android" && (
+                        <>
+                            <Button onPress={() => setBreakfastTimePicker(true)} title="시간 설정" />
+                            {breakfasteTimePicker && (
+                                <DateTimePicker
+                                    value={breakfastTime}
+                                    mode="time"
+                                    onChange={(e, date) => {
+                                        setBreakfastTimePicker(false);
+                                        date && setBreakfastTime(date);
+                                    }}
+                                />
+                            )}
+                        </>
+                    )}
                 </View>
                 <View style={styles.time}>
                     <Text style={styles.timeText}>점심 식사 시간</Text>
-                    <DateTimePicker
-                        value={lunchTime}
-                        mode="time"
-                        onChange={(e, date) => {
-                            date && setLunchTime(date);
-                        }}
-                    />
+                    {Platform.OS === "ios" && (
+                        <DateTimePicker
+                            value={lunchTime}
+                            mode="time"
+                            onChange={(e, date) => {
+                                date && setLunchTime(date);
+                            }}
+                        />
+                    )}
+                    {Platform.OS === "android" && (
+                        <>
+                            <Button onPress={() => setLunchTimePicker(true)} title="시간 설정" />
+                            {lunchTimePicker && (
+                                <DateTimePicker
+                                    value={lunchTime}
+                                    mode="time"
+                                    onChange={(e, date) => {
+                                        setLunchTimePicker(false);
+                                        date && setLunchTime(date);
+                                    }}
+                                />
+                            )}
+                        </>
+                    )}
                 </View>
                 <View style={styles.time}>
                     <Text style={styles.timeText}>저녁 식사 시간</Text>
-                    <DateTimePicker
-                        value={dinnerTime}
-                        mode="time"
-                        onChange={(e, date) => {
-                            date && setDinnerTime(date);
-                        }}
-                    />
+                    {Platform.OS === "ios" && (
+                        <DateTimePicker
+                            value={dinnerTime}
+                            mode="time"
+                            onChange={(e, date) => {
+                                date && setDinnerTime(date);
+                            }}
+                        />
+                    )}
+                    {Platform.OS === "android" && (
+                        <>
+                            <Button onPress={() => setDinnerTimePicker(true)} title="시간 설정" />
+                            {dinnerTimePicker && (
+                                <DateTimePicker
+                                    value={dinnerTime}
+                                    mode="time"
+                                    onChange={(e, date) => {
+                                        setDinnerTimePicker(false);
+                                        date && setDinnerTime(date);
+                                    }}
+                                />
+                            )}
+                        </>
+                    )}
                 </View>
 
                 <TouchableOpacity

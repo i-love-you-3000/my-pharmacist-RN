@@ -1,15 +1,18 @@
 import { useEffect, useState, useContext } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable } from "react-native";
-import { Link, Stack, useRouter } from "expo-router";
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable, Button } from "react-native";
+import { Link, Stack, useRouter, useGlobalSearchParams } from "expo-router";
 import Checkbox from "expo-checkbox";
+import { Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import medicineNameContext from "../components/context";
+
+import { useMedicineNameContext } from "../components/context";
 const GREEN = "#5CBD57";
 const BLUE = "#24B2FF";
 const GREY = "#A2AF9F";
 export default function AddMedicine() {
     const router = useRouter();
+    let item = useGlobalSearchParams();
     const [medicineName, setMedicineName] = useState("");
     const [beforeMeal, setBeforeMeal] = useState(false);
     const [afterMeal, setAfterMeal] = useState(true);
@@ -17,13 +20,15 @@ export default function AddMedicine() {
     const [lunch, setLunch] = useState(true);
     const [dinner, setDinner] = useState(true);
     const [manufactureTime, setManufactureTime] = useState(new Date(Date.now()));
-    const { medicineNameFromCamera, setMedicineNameFromCamera } = useContext(medicineNameContext);
-    useEffect(() => {
-        medicineNameFromCamera && setMedicineName(medicineNameFromCamera);
-    }, [medicineNameFromCamera]);
+    const [manufactureTimePicker, setManufactureTimePicker] = useState(false);
+    const { medicineNameFromCamera, setMedicineNameFromCamera } = useMedicineNameContext();
     useEffect(() => {
         setMedicineName("");
     }, []);
+    useEffect(() => {
+        console.log(medicineNameFromCamera);
+        if (medicineNameFromCamera) setMedicineName(medicineNameFromCamera);
+    }, [medicineNameFromCamera]);
     return (
         <>
             <Stack.Screen
@@ -146,13 +151,30 @@ export default function AddMedicine() {
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.title}>약 유통기한</Text>
-                    <DateTimePicker
-                        value={manufactureTime}
-                        mode="date"
-                        onChange={(e, date) => {
-                            date && setManufactureTime(date);
-                        }}
-                    />
+
+                    {Platform.OS === "ios" && (
+                        <DateTimePicker
+                            value={manufactureTime}
+                            mode="date"
+                            onChange={(e, date) => {
+                                date && setManufactureTime(date);
+                            }}
+                        />
+                    )}
+                    {Platform.OS === "android" && (
+                        <>
+                            <Button onPress={() => setManufactureTimePicker(true)} title="시간 설정" />
+                            {manufactureTimePicker && (
+                                <DateTimePicker
+                                    value={manufactureTime}
+                                    mode="date"
+                                    onChange={(e, date) => {
+                                        date && setManufactureTime(date);
+                                    }}
+                                />
+                            )}
+                        </>
+                    )}
                 </View>
 
                 <TouchableOpacity

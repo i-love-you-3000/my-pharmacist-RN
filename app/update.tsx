@@ -1,11 +1,11 @@
 import { useEffect, useState, useContext } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable } from "react-native";
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable, Button, Platform } from "react-native";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import Checkbox from "expo-checkbox";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import axios from "axios";
-import medicineNameContext from "../components/context";
+import { useMedicineNameContext } from "../components/context";
 
 const GREEN = "#5CBD57";
 const BLUE = "#24B2FF";
@@ -31,8 +31,8 @@ export default function AddMedicine() {
     const [dinner, setDinner] = useState(true);
     const [manufactureTime, setManufactureTime] = useState(new Date(Date.now()));
     const params = useLocalSearchParams();
-    const { medicineNameFromCamera, setMedicineNameFromCamera } = useContext(medicineNameContext);
-
+    const [manufactureTimePicker, setManufactureTimePicker] = useState(false);
+    const { medicineNameFromCamera, setMedicineNameFromCamera } = useMedicineNameContext();
     const getMedicineInfo = async () => {
         // await axios
         //     .get("http://localhost:포트번호/app/prescription/", { params: { id: params.id, itemSeq:params.itemSeq, registerDate:params.registerDate } })
@@ -56,9 +56,10 @@ export default function AddMedicine() {
         testEatData.baw === "A" ? setBeforeMeal(true) : setAfterMeal(true);
         setManufactureTime(new Date(testEatData.expPeriod));
     };
+
     useEffect(() => {
-        console.log("Context");
-        medicineNameFromCamera && setMedicineName(medicineNameFromCamera);
+        console.log(medicineNameFromCamera);
+        if (medicineNameFromCamera) setMedicineName(medicineNameFromCamera);
     }, [medicineNameFromCamera]);
     useEffect(() => {
         setMedicineName("");
@@ -188,13 +189,29 @@ export default function AddMedicine() {
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.title}>약 유통기한</Text>
-                    <DateTimePicker
-                        value={manufactureTime}
-                        mode="date"
-                        onChange={(e, date) => {
-                            date && setManufactureTime(date);
-                        }}
-                    />
+                    {Platform.OS === "ios" && (
+                        <DateTimePicker
+                            value={manufactureTime}
+                            mode="date"
+                            onChange={(e, date) => {
+                                date && setManufactureTime(date);
+                            }}
+                        />
+                    )}
+                    {Platform.OS === "android" && (
+                        <>
+                            <Button onPress={() => setManufactureTimePicker(true)} title="시간 설정" />
+                            {manufactureTimePicker && (
+                                <DateTimePicker
+                                    value={manufactureTime}
+                                    mode="date"
+                                    onChange={(e, date) => {
+                                        date && setManufactureTime(date);
+                                    }}
+                                />
+                            )}
+                        </>
+                    )}
                 </View>
 
                 <TouchableOpacity

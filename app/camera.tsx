@@ -1,18 +1,20 @@
 import { StyleSheet } from "react-native";
 import { Button, TouchableOpacity, ImageBackground, Text, View } from "react-native";
-import { Stack, useRouter } from "expo-router";
+import { Stack, router, useGlobalSearchParams } from "expo-router";
 import { Camera, CameraType, CameraCapturedPicture } from "expo-camera";
 import { useContext, useEffect, useRef, useState } from "react";
-import medicineNameContext from "../components/context";
+import { useNavigation } from "@react-navigation/native";
+import { useMedicineNameContext } from "../components/context";
 import axios from "axios";
 
 export default function TabOneScreen() {
     let cameraRef = useRef<Camera>(null);
-    const router = useRouter();
+    const navigation = useNavigation();
+
     const [photo, setPhoto] = useState<CameraCapturedPicture>();
     const [permission, requestPermission] = Camera.useCameraPermissions();
     const [viewPicture, setViewPicture] = useState(false);
-    const { medicineNameFromCamera, setMedicineNameFromCamera } = useContext(medicineNameContext);
+    const { medicineNameFromCamera, setMedicineNameFromCamera } = useMedicineNameContext();
 
     if (!permission) {
         // Camera permissions are still loading
@@ -46,7 +48,7 @@ export default function TabOneScreen() {
             setPhoto(newPhoto);
             setViewPicture(true);
 
-            setMedicineNameFromCamera(medicineNameFromCamera + "2");
+            // setMedicineNameFromCamera(medicineNameFromCamera + "2");
             // await axios
             //     .get("")
             //     .then((res) => {
@@ -60,9 +62,9 @@ export default function TabOneScreen() {
             //     });
         }
     };
-    useEffect(() => {
-        setMedicineNameFromCamera("");
-    }, []);
+    // useEffect(() => {
+    //     // setMedicineNameFromCamera("");
+    // }, []);
     return (
         <View style={styles.container}>
             <Stack.Screen
@@ -90,6 +92,17 @@ export default function TabOneScreen() {
                                 }}
                             >
                                 <Text style={styles.text}>다시 찍기</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => {
+                                    setMedicineNameFromCamera("aabc");
+
+                                    router.back();
+                                }}
+                            >
+                                <Text style={styles.text}>돌아가기</Text>
                             </TouchableOpacity>
                         </View>
                     </ImageBackground>
