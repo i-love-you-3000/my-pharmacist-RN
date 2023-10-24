@@ -47,7 +47,7 @@ export default function Home() {
     const router = useRouter();
     const getMedList = async () => {
         await axios
-            .get("http://localhost:포트번호/app/prescription/", { params: params.id })
+            .get("http://localhost:5000/app/prescription/", { params: { id: params.id } })
             .then((res) => {
                 setList(res.data);
             })
@@ -74,18 +74,23 @@ export default function Home() {
                     options={{
                         title: "복용중인 약",
                         headerRight: () => (
-                            <Link href="/add" asChild>
-                                <Pressable>
-                                    {({ pressed }) => (
-                                        <FontAwesome
-                                            name="plus"
-                                            size={20}
-                                            color={"white"}
-                                            style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                                        />
-                                    )}
-                                </Pressable>
-                            </Link>
+                            <Pressable
+                                onPress={() => {
+                                    router.push({
+                                        pathname: "/add",
+                                        params: { id: params.id },
+                                    });
+                                }}
+                            >
+                                {({ pressed }) => (
+                                    <FontAwesome
+                                        name="plus"
+                                        size={20}
+                                        color={"white"}
+                                        style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                                    />
+                                )}
+                            </Pressable>
                         ),
                         headerLeft: () => (
                             <Pressable

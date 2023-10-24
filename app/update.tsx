@@ -33,30 +33,51 @@ export default function AddMedicine() {
     const params = useLocalSearchParams();
     const [manufactureTimePicker, setManufactureTimePicker] = useState(false);
     const { medicineNameFromCamera, setMedicineNameFromCamera } = useMedicineNameContext();
+    const [intakePeriod, setIntakePeriod] = useState("");
     const getMedicineInfo = async () => {
-        // await axios
-        //     .get("http://localhost:포트번호/app/prescription/", { params: { id: params.id, itemSeq:params.itemSeq, registerDate:params.registerDate } })
-        //     .then((res) => {})
-        //     .catch((err) => console.log(err));
-        const testEatData: MedicineEatData = {
-            itemSeq: "202002585",
-            registerDate: "2023/07/05",
-            itemName: "약이름",
-            breakfast: true,
-            lunch: true,
-            dinner: true,
-            baw: "B",
-            intakePeriod: 8,
-            expPeriod: "2023-07-05",
-        };
-        setMedicineName(testEatData.itemName);
-        setBreakfast(testEatData.breakfast);
-        setLunch(testEatData.lunch);
-        setDinner(testEatData.dinner);
-        testEatData.baw === "A" ? setBeforeMeal(true) : setAfterMeal(true);
-        setManufactureTime(new Date(testEatData.expPeriod));
+        await axios
+            .get("http://localhost:5000/app/prescription/detail", {
+                params: { id: params.id, itemSeq: params.itemSeq, registerDate: params.registerDate },
+            })
+            .then((res) => {
+                setMedicineName(res.data.itemName);
+                setBreakfast(res.data.breakfast);
+                setLunch(res.data.lunch);
+                setDinner(res.data.dinner);
+                res.data.baw === "A" ? setBeforeMeal(true) : setAfterMeal(true);
+                setManufactureTime(new Date(res.data.expPeriod));
+                setIntakePeriod(res.data.intakePeriod + "");
+            })
+            .catch((err) => console.log(err));
+        // const testEatData: MedicineEatData = {
+        //     itemSeq: "202002585",
+        //     registerDate: "2023/07/05",
+        //     itemName: "약이름",
+        //     breakfast: true,
+        //     lunch: true,
+        //     dinner: true,
+        //     baw: "B",
+        //     intakePeriod: 8,
+        //     expPeriod: "2023-07-05",
+        // };
     };
-
+    const updateMedicine = async () => {
+        await axios
+            .post("http://localhost:5000/app/prescription/update", {
+                id: params.id,
+                itemSeq: medicineName,
+                registerData: Date.now(),
+                breakfast: breakfast,
+                lunch: lunch,
+                dinner: dinner,
+                baw: beforeMeal ? "B" : "A",
+                intakePeriod: intakePeriod,
+                expPeriod: manufactureTime,
+            })
+            .then((res) => {
+                if (res.data.response) router.back();
+            });
+    };
     useEffect(() => {
         console.log(medicineNameFromCamera);
         if (medicineNameFromCamera) setMedicineName(medicineNameFromCamera);
@@ -213,10 +234,21 @@ export default function AddMedicine() {
                         </>
                     )}
                 </View>
-
+                <View style={styles.row}>
+                    <View style={styles.row}>
+                        <TextInput
+                            onChangeText={(e) => setIntakePeriod(e)}
+                            returnKeyType="done"
+                            value={intakePeriod}
+                            placeholder="복용 기한 ex) 6"
+                            placeholderTextColor="gray"
+                            style={styles.inputText}
+                        ></TextInput>
+                    </View>
+                </View>
                 <TouchableOpacity
                     onPress={() => {
-                        router.replace("/home");
+                        updateMedicine();
                     }}
                     style={styles.Button}
                 >

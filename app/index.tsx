@@ -9,7 +9,7 @@ export default function Login() {
     const [loginID, setLoginID] = useState("");
     const [loginPW, setLoginPW] = useState("");
     const getLogin = async () => {
-        router.replace({ pathname: "/home", params: { id: loginID } });
+        // router.replace({ pathname: "/home", params: { id: loginID } });
         await axios
             .get("http://localhost:포트번호/app/users/login", { params: { id: loginID, pw: loginPW } })
             .then((res) => {

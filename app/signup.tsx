@@ -15,7 +15,7 @@ export default function SignUp() {
     const [breakfasteTimePicker, setBreakfastTimePicker] = useState(false);
     const [lunchTimePicker, setLunchTimePicker] = useState(false);
     const [dinnerTimePicker, setDinnerTimePicker] = useState(false);
-    const getSignIp = async () => {
+    const getSignUp = async () => {
         await axios
             .post("http://localhost:{포트번호}/app/users/register", {
                 id: newID,
@@ -136,8 +136,8 @@ export default function SignUp() {
 
                 <TouchableOpacity
                     onPress={() => {
-                        router.back();
-                        getSignIp();
+                        // router.back();
+                        getSignUp();
                         // router.push("/login");
                     }}
                     style={styles.signupButton}

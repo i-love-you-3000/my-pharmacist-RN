@@ -1,12 +1,13 @@
 import { useEffect, useState, useContext } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable, Button } from "react-native";
-import { Link, Stack, useRouter, useGlobalSearchParams } from "expo-router";
+import { Link, Stack, useRouter, useGlobalSearchParams, useLocalSearchParams } from "expo-router";
 import Checkbox from "expo-checkbox";
 import { Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 import { useMedicineNameContext } from "../components/context";
+import axios from "axios";
 const GREEN = "#5CBD57";
 const BLUE = "#24B2FF";
 const GREY = "#A2AF9F";
@@ -22,13 +23,33 @@ export default function AddMedicine() {
     const [manufactureTime, setManufactureTime] = useState(new Date(Date.now()));
     const [manufactureTimePicker, setManufactureTimePicker] = useState(false);
     const { medicineNameFromCamera, setMedicineNameFromCamera } = useMedicineNameContext();
+    const [intakePeriod, setIntakePeriod] = useState("");
+    const params = useLocalSearchParams();
     useEffect(() => {
         setMedicineName("");
+        console.log(params.id);
     }, []);
     useEffect(() => {
         console.log(medicineNameFromCamera);
         if (medicineNameFromCamera) setMedicineName(medicineNameFromCamera);
     }, [medicineNameFromCamera]);
+    const addMedicine = async () => {
+        await axios
+            .post("http://localhost:5000/app/prescription/register", {
+                id: params.id,
+                itemSeq: medicineName,
+                registerData: Date.now(),
+                breakfast: breakfast,
+                lunch: lunch,
+                dinner: dinner,
+                baw: beforeMeal ? "B" : "A",
+                intakePeriod: intakePeriod,
+                expPeriod: manufactureTime,
+            })
+            .then((res) => {
+                if (res.data.response) router.back();
+            });
+    };
     return (
         <>
             <Stack.Screen
@@ -43,6 +64,7 @@ export default function AddMedicine() {
                         returnKeyType="done"
                         value={medicineName}
                         placeholder="약 이름"
+                        placeholderTextColor="gray"
                         style={styles.inputText}
                     ></TextInput>
                     <Link href="/camera" asChild>
@@ -176,10 +198,19 @@ export default function AddMedicine() {
                         </>
                     )}
                 </View>
-
+                <View style={styles.row}>
+                    <TextInput
+                        onChangeText={(e) => setIntakePeriod(e)}
+                        returnKeyType="done"
+                        value={intakePeriod}
+                        placeholder="복용 기한 ex) 6"
+                        placeholderTextColor="gray"
+                        style={styles.inputText}
+                    ></TextInput>
+                </View>
                 <TouchableOpacity
                     onPress={() => {
-                        router.replace("/home");
+                        addMedicine();
                     }}
                     style={styles.Button}
                 >
