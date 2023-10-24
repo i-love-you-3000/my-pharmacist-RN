@@ -57,8 +57,8 @@ export default function Home() {
     };
     useEffect(() => {
         console.log(params); // login ID
-        // getMedList();
-        setList(testData);
+        getMedList();
+        // setList(testData);
     }, []);
     const goDetail = (itemSeq: string, registerData: string) => {
         router.setParams({});

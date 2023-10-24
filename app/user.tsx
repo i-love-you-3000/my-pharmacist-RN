@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import axios from "axios";
 
-export default function SignUp() {
+export default function User() {
     const router = useRouter();
     const [breakfastTime, setBreakfastTime] = useState(new Date(`1970-01-01T08:00:00`));
     const [lunchTime, setLunchTime] = useState(new Date(`1970-01-01T12:00:00`));

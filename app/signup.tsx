@@ -26,6 +26,7 @@ export default function SignUp() {
             })
             .then((res) => {
                 if (res.data.response) router.back();
+                else alert("다시 시도해주세요");
             })
             .catch((err) => console.log(err));
     };

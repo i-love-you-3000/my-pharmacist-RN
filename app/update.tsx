@@ -21,7 +21,7 @@ type MedicineEatData = {
     intakePeriod: number; // 8,
     expPeriod: string; // "2023/07/05"
 };
-export default function AddMedicine() {
+export default function Update() {
     const router = useRouter();
     const [medicineName, setMedicineName] = useState("");
     const [beforeMeal, setBeforeMeal] = useState(false);

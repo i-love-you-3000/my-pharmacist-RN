@@ -11,7 +11,7 @@ import axios from "axios";
 const GREEN = "#5CBD57";
 const BLUE = "#24B2FF";
 const GREY = "#A2AF9F";
-export default function AddMedicine() {
+export default function Add() {
     const router = useRouter();
     let item = useGlobalSearchParams();
     const [medicineName, setMedicineName] = useState("");

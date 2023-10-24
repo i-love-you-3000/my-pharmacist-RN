@@ -44,7 +44,7 @@ const testEatData: MedicineEatData = {
 const GREEN = "#5CBD57";
 const BLUE = "#24B2FF";
 const GREY = "#A2AF9F";
-export default function AddMedicine() {
+export default function Detail() {
     const router = useRouter();
     const params = useLocalSearchParams();
     const [medicineEatData, setMedicineEatData] = useState<MedicineEatData>();
@@ -95,10 +95,10 @@ export default function AddMedicine() {
     };
     useEffect(() => {
         console.log(params);
-        // getMedicineInfo();
-        // getMedicineEatData();
-        setMedicineEatData(testEatData);
-        setMedicineInfo(testInfo);
+        getMedicineInfo();
+        getMedicineEatData();
+        // setMedicineEatData(testEatData);
+        // setMedicineInfo(testInfo);
         // setMedicineNameFromCamera("");
     }, []);
     return (

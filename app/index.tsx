@@ -11,7 +11,7 @@ export default function Login() {
     const getLogin = async () => {
         // router.replace({ pathname: "/home", params: { id: loginID } });
         await axios
-            .get("http://localhost:포트번호/app/users/login", { params: { id: loginID, pw: loginPW } })
+            .get("http://localhost:5000/app/users/login", { params: { id: loginID, pw: loginPW } })
             .then((res) => {
                 if (res.data.response) {
                     router.replace({ pathname: "/home", params: { id: loginID } });
@@ -19,7 +19,7 @@ export default function Login() {
                     alert("다시 시도해주세요.");
                 }
             })
-            .catch((err) => console.log(err));
+            .catch((err) => alert("다시 시도해주세요"));
     };
     return (
         <>
