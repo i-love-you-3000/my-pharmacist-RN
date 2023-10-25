@@ -95,7 +95,10 @@ export default function Home() {
                         headerLeft: () => (
                             <Pressable
                                 onPress={() => {
-                                    router.push("/user");
+                                    router.push({
+                                        pathname: "/user",
+                                        params: { id: params.id },
+                                    });
                                 }}
                             >
                                 {({ pressed }) => (

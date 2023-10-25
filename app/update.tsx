@@ -65,8 +65,8 @@ export default function Update() {
         await axios
             .post("http://localhost:5000/app/prescription/update", {
                 id: params.id,
-                itemSeq: medicineName,
-                registerData: Date.now(),
+                itemName: medicineName,
+                registerDate: Date.now(),
                 breakfast: breakfast,
                 lunch: lunch,
                 dinner: dinner,

@@ -17,7 +17,7 @@ export default function SignUp() {
     const [dinnerTimePicker, setDinnerTimePicker] = useState(false);
     const getSignUp = async () => {
         await axios
-            .post("http://localhost:{포트번호}/app/users/register", {
+            .post("http://localhost:5000/app/users/register", {
                 id: newID,
                 pw: newPW,
                 breakfast: breakfastTime,
@@ -134,7 +134,6 @@ export default function SignUp() {
                         </>
                     )}
                 </View>
-
                 <TouchableOpacity
                     onPress={() => {
                         // router.back();

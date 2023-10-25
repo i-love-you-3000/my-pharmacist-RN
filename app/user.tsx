@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Platform, Button } from "react-native";
 import { useRouter } from "expo-router";
@@ -13,9 +13,14 @@ export default function User() {
     const [breakfasteTimePicker, setBreakfastTimePicker] = useState(false);
     const [lunchTimePicker, setLunchTimePicker] = useState(false);
     const [dinnerTimePicker, setDinnerTimePicker] = useState(false);
-    const getSignIp = async () => {
+
+    const [newPW, setNewPW] = useState("");
+    const params = useLocalSearchParams();
+    const getSignUp = async () => {
         await axios
-            .post("", {
+            .post("http://localhost:5000/app/users/profile/update", {
+                id: params.id,
+                pw: newPW,
                 breakfast: breakfastTime,
                 lunch: lunchTime,
                 dinner: dinnerTime,
@@ -115,11 +120,19 @@ export default function User() {
                         </>
                     )}
                 </View>
-
+                <View>
+                    <TextInput
+                        onChangeText={(e) => setNewPW(e)}
+                        returnKeyType="done"
+                        value={newPW}
+                        placeholder="새 비밀번호"
+                        style={styles.inputText}
+                    ></TextInput>
+                </View>
                 <TouchableOpacity
                     onPress={() => {
                         router.back();
-                        getSignIp();
+                        getSignUp();
                         // router.push("/login");
                     }}
                     style={styles.signupButton}

@@ -53,7 +53,7 @@ export default function Detail() {
 
     const getMedicineInfo = async () => {
         await axios
-            .get("http://localhost:포트번호/app/medicine", {
+            .get("http://localhost:5000/app/medicine", {
                 params: {
                     itemSeq: params.itemSeq,
                 },
@@ -67,7 +67,7 @@ export default function Detail() {
     };
     const getMedicineEatData = async () => {
         await axios
-            .get("http://localhost:포트번호/app/prescription/detail", {
+            .get("http://localhost:5000/app/prescription/detail", {
                 params: {
                     id: params.id,
                     itemSeq: params.itemSeq,
@@ -83,7 +83,7 @@ export default function Detail() {
     };
     const deleteMedicine = async () => {
         await axios
-            .delete("http://localhost:포트번호/app/prescription/", {
+            .delete("http://localhost:5000/app/prescription/", {
                 params: { id: params.id, itemSeq: params.itemSeq, registerDate: params.registerDate },
             })
             .then((res) => {

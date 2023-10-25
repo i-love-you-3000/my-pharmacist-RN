@@ -37,7 +37,7 @@ export default function Add() {
         await axios
             .post("http://localhost:5000/app/prescription/register", {
                 id: params.id,
-                itemSeq: medicineName,
+                itemName: medicineName,
                 registerData: Date.now(),
                 breakfast: breakfast,
                 lunch: lunch,
