@@ -36,7 +36,7 @@ export default function Update() {
     const [intakePeriod, setIntakePeriod] = useState("");
     const getMedicineInfo = async () => {
         await axios
-            .get("http://localhost:5000/app/prescription/detail", {
+            .get("http://172.20.10.13:5000/app/prescription/detail", {
                 params: { id: params.id, itemSeq: params.itemSeq, registerDate: params.registerDate },
             })
             .then((res) => {
@@ -63,7 +63,7 @@ export default function Update() {
     };
     const updateMedicine = async () => {
         await axios
-            .post("http://localhost:5000/app/prescription/update", {
+            .post("http://172.20.10.13:5000/app/prescription/update", {
                 id: params.id,
                 itemName: medicineName,
                 registerDate: Date.now(),

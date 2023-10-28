@@ -35,7 +35,7 @@ export default function Add() {
     }, [medicineNameFromCamera]);
     const addMedicine = async () => {
         await axios
-            .post("http://localhost:5000/app/prescription/register", {
+            .post("http://172.20.10.13:5000/app/prescription/register", {
                 id: params.id,
                 itemName: medicineName,
                 registerData: Date.now(),

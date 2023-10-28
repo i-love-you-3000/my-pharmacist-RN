@@ -11,7 +11,7 @@ export default function Login() {
     const getLogin = async () => {
         // router.replace({ pathname: "/home", params: { id: loginID } });
         await axios
-            .get("http://localhost:5000/app/users/login", { params: { id: loginID, pw: loginPW } })
+            .post("http://172.20.10.13:5000/app/users/login", { id: loginID, pw: loginPW })
             .then((res) => {
                 if (res.data.response) {
                     router.replace({ pathname: "/home", params: { id: loginID } });

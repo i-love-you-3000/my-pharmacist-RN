@@ -47,7 +47,7 @@ export default function Home() {
     const router = useRouter();
     const getMedList = async () => {
         await axios
-            .get("http://localhost:5000/app/prescription/", { params: { id: params.id } })
+            .get("http://172.20.10.13:5000/app/prescription/", { params: { id: params.id } })
             .then((res) => {
                 setList(res.data);
             })
