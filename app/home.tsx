@@ -118,15 +118,14 @@ export default function Home() {
                         headerLeft: () => (
                             <Pressable
                                 onPress={() => {
-                                    router.push({
-                                        pathname: "/user",
-                                        params: { id: params.id },
+                                    router.replace({
+                                        pathname: "/",
                                     });
                                 }}
                             >
                                 {({ pressed }) => (
                                     <FontAwesome
-                                        name="user-circle-o"
+                                        name="sign-out"
                                         size={20}
                                         color={"white"}
                                         style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}

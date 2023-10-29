@@ -191,6 +191,7 @@ export default function Add() {
                                     value={manufactureTime}
                                     mode="date"
                                     onChange={(e, date) => {
+                                        setManufactureTimePicker(false);
                                         date && setManufactureTime(date);
                                     }}
                                 />
