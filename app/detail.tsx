@@ -53,12 +53,12 @@ export default function Detail() {
 
     const getMedicineInfo = async () => {
         await axios
-            .get("http://172.20.10.13:5000/app/medicine", {
-                params: {
-                    itemSeq: params.itemSeq,
-                },
+            .post("http://172.20.10.13:5000/app/medicine", {
+                itemSeq: params.itemSeq,
             })
             .then((res) => {
+                console.log("med info :", res.data);
+
                 setMedicineInfo(res.data);
             })
             .catch((err) => {
@@ -67,14 +67,13 @@ export default function Detail() {
     };
     const getMedicineEatData = async () => {
         await axios
-            .get("http://172.20.10.13:5000/app/prescription/detail", {
-                params: {
-                    id: params.id,
-                    itemSeq: params.itemSeq,
-                    registerDate: params.registerData,
-                },
+            .post("http://172.20.10.13:5000/app/prescription/detail", {
+                id: params.id,
+                itemSeq: params.itemSeq,
+                registerDate: params.registerDate,
             })
             .then((res) => {
+                console.log("eat data : ", res.data);
                 setMedicineEatData(res.data);
             })
             .catch((err) => {
@@ -83,12 +82,15 @@ export default function Detail() {
     };
     const deleteMedicine = async () => {
         await axios
-            .delete("http://172.20.10.13:5000/app/prescription/", {
+            .delete("http://172.20.10.13:5000/app/prescription/delete", {
                 params: { id: params.id, itemSeq: params.itemSeq, registerDate: params.registerDate },
             })
             .then((res) => {
                 if (res.data.response) {
-                    router.back();
+                    router.replace({
+                        pathname: "/home",
+                        params: { id: params.id },
+                    });
                 }
             })
             .catch((err) => console.log(err));
@@ -106,30 +108,48 @@ export default function Detail() {
             <Stack.Screen
                 options={{
                     title: "약 상세정보",
+                    headerLeft: () => (
+                        <Pressable
+                            onPress={() => {
+                                router.replace({
+                                    pathname: "/home",
+                                    params: { id: params.id },
+                                });
+                            }}
+                        >
+                            {({ pressed }) => (
+                                <FontAwesome
+                                    name="angle-left"
+                                    size={20}
+                                    color={"white"}
+                                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                                />
+                            )}
+                        </Pressable>
+                    ),
                     headerRight: () => (
                         <View style={styles.row}>
-                            <Link
-                                href={{
-                                    pathname: "/update",
-                                    params: {
-                                        id: params.id,
-                                        itemSeq: params.itemSeq,
-                                        registerDate: params.registerDate,
-                                    },
+                            <Pressable
+                                onPress={() => {
+                                    router.replace({
+                                        pathname: "/update",
+                                        params: {
+                                            id: params.id,
+                                            itemSeq: params.itemSeq,
+                                            registerDate: params.registerDate,
+                                        },
+                                    });
                                 }}
-                                asChild
                             >
-                                <Pressable>
-                                    {({ pressed }) => (
-                                        <FontAwesome
-                                            name="edit"
-                                            size={20}
-                                            color={"white"}
-                                            style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                                        />
-                                    )}
-                                </Pressable>
-                            </Link>
+                                {({ pressed }) => (
+                                    <FontAwesome
+                                        name="edit"
+                                        size={20}
+                                        color={"white"}
+                                        style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                                    />
+                                )}
+                            </Pressable>
                             <Pressable onPress={deleteMedicine}>
                                 {({ pressed }) => (
                                     <FontAwesome

@@ -38,7 +38,7 @@ export default function Add() {
             .post("http://172.20.10.13:5000/app/prescription/register", {
                 id: params.id,
                 itemName: medicineName,
-                registerData: Date.now(),
+                registerDate: Date.now(),
                 breakfast: breakfast,
                 lunch: lunch,
                 dinner: dinner,
@@ -47,7 +47,7 @@ export default function Add() {
                 expPeriod: manufactureTime,
             })
             .then((res) => {
-                if (res.data.response) router.back();
+                if (res.data.response) router.replace({ pathname: "/home", params: { id: params.id } });
             });
     };
     return (

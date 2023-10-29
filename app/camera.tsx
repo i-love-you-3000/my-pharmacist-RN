@@ -49,17 +49,18 @@ export default function TabOneScreen() {
             setViewPicture(true);
 
             // setMedicineNameFromCamera(medicineNameFromCamera + "2");
-            // await axios
-            //     .get("")
-            //     .then((res) => {
-            //         //서버로 부터 약이름 받고
+            await axios
+                .post("http://172.20.10.13:5000/app/prescription/detail", { image: newPhoto.base64 })
+                .then((res) => {
+                    //서버로 부터 약이름 받고
 
-            //         //다시 입력창으로 돌아가기
-            //         router.back();
-            //     })
-            //     .catch((err) => {
-            //         console.log(err);
-            //     });
+                    //다시 입력창으로 돌아가기
+                    if (res.data.response) setMedicineNameFromCamera(res.data.medicineName);
+                    router.back();
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
     };
     // useEffect(() => {

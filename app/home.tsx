@@ -45,9 +45,16 @@ export default function Home() {
     const [list, setList] = useState<MedicineEatData[]>();
     const params = useLocalSearchParams();
     const router = useRouter();
+    const truncateString = (str: string, maxLength: number) => {
+        if (str.length <= maxLength) {
+            return str;
+        } else {
+            return str.slice(0, maxLength) + "...";
+        }
+    };
     const getMedList = async () => {
         await axios
-            .get("http://172.20.10.13:5000/app/prescription/", { params: { id: params.id } })
+            .post("http://172.20.10.13:5000/app/prescription/", { id: params.id })
             .then((res) => {
                 setList(res.data);
             })
@@ -60,11 +67,11 @@ export default function Home() {
         getMedList();
         // setList(testData);
     }, []);
-    const goDetail = (itemSeq: string, registerData: string) => {
+    const goDetail = (itemSeq: string, registerDate: string) => {
         router.setParams({});
         router.push({
             pathname: "/detail",
-            params: { id: params.id, itemSeq, registerData },
+            params: { id: params.id, itemSeq, registerDate },
         });
     };
     return (
@@ -74,23 +81,39 @@ export default function Home() {
                     options={{
                         title: "복용중인 약",
                         headerRight: () => (
-                            <Pressable
-                                onPress={() => {
-                                    router.push({
-                                        pathname: "/add",
-                                        params: { id: params.id },
-                                    });
-                                }}
-                            >
-                                {({ pressed }) => (
-                                    <FontAwesome
-                                        name="plus"
-                                        size={20}
-                                        color={"white"}
-                                        style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                                    />
-                                )}
-                            </Pressable>
+                            <>
+                                <Pressable
+                                    onPress={() => {
+                                        router.push({
+                                            pathname: "/add",
+                                            params: { id: params.id },
+                                        });
+                                    }}
+                                >
+                                    {({ pressed }) => (
+                                        <FontAwesome
+                                            name="plus"
+                                            size={20}
+                                            color={"white"}
+                                            style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                                        />
+                                    )}
+                                </Pressable>
+                                <Pressable
+                                    onPress={() => {
+                                        getMedList();
+                                    }}
+                                >
+                                    {({ pressed }) => (
+                                        <FontAwesome
+                                            name="refresh"
+                                            size={20}
+                                            color={"white"}
+                                            style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                                        />
+                                    )}
+                                </Pressable>
+                            </>
                         ),
                         headerLeft: () => (
                             <Pressable
@@ -120,24 +143,26 @@ export default function Home() {
                             key={index}
                             onPress={() => goDetail(med.itemSeq, med.registerDate)}
                         >
-                            <View style={styles.listItemLeft}>
-                                <Text style={styles.medicineName}>{med.itemName}</Text>
-                            </View>
-                            <View style={styles.listItemRight}>
-                                <View style={styles.eatTimeContainer}>
-                                    {med.breakfast ? <Text style={styles.eatTime}>아침</Text> : null}
-                                    {med.lunch ? <Text style={styles.eatTime}>점심</Text> : null}
-                                    {med.dinner ? <Text style={styles.eatTime}>저녁</Text> : null}
-                                    {med.baw === "B" ? (
-                                        <Text style={styles.eatTimeBAW}>식전</Text>
-                                    ) : med.baw === "A" ? (
-                                        <Text style={styles.eatTimeBAW}>식전</Text>
-                                    ) : (
-                                        <Text style={styles.eatTimeBAW}>식중</Text>
-                                    )}
+                            <View style={styles.columnList}>
+                                <View style={styles.listItemLeft}>
+                                    <Text style={styles.medicineName}>{truncateString(med.itemName, 12)}</Text>
                                 </View>
-                                <Text style={styles.registerDate}>복용 시작일 : {med.registerDate}</Text>
-                                <Text style={styles.expiratioDate}>유통기한 : {med.expPeriod}</Text>
+                                <View style={styles.listItemRight}>
+                                    <View style={styles.eatTimeContainer}>
+                                        {med.breakfast ? <Text style={styles.eatTime}>아침</Text> : null}
+                                        {med.lunch ? <Text style={styles.eatTime}>점심</Text> : null}
+                                        {med.dinner ? <Text style={styles.eatTime}>저녁</Text> : null}
+                                        {med.baw === "B" ? (
+                                            <Text style={styles.eatTimeBAW}>식전</Text>
+                                        ) : med.baw === "A" ? (
+                                            <Text style={styles.eatTimeBAW}>식전</Text>
+                                        ) : (
+                                            <Text style={styles.eatTimeBAW}>식중</Text>
+                                        )}
+                                    </View>
+                                    <Text style={styles.registerDate}>복용 시작일 : {med.registerDate}</Text>
+                                    <Text style={styles.expiratioDate}>유통기한 : {med.expPeriod}</Text>
+                                </View>
                             </View>
                         </TouchableOpacity>
                     ))}
@@ -212,5 +237,9 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 14,
         marginBottom: 3,
+    },
+    columnList: {
+        flexDirection: "column",
+        flex: 1,
     },
 });

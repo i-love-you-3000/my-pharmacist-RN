@@ -38,7 +38,7 @@ export default function User() {
                         title: "정보 수정",
                     }}
                 />
-                <Text style={styles.title}>바뀐 식사 시간{`\n`}입력해주세요~</Text>
+                {/* <Text style={styles.title}>바뀐 식사 시간{`\n`}입력해주세요~</Text>
                 <View style={styles.time}>
                     <Text style={styles.timeText}>아침 식사 시간</Text>
                     {Platform.OS === "ios" && (
@@ -138,7 +138,7 @@ export default function User() {
                     style={styles.signupButton}
                 >
                     <Text style={styles.buttonText}>수정</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity
                     onPress={() => {
                         router.replace("/");
@@ -197,8 +197,8 @@ const styles = StyleSheet.create({
         backgroundColor: BLUE,
     },
     logoutButton: {
-        marginVertical: 20,
-        width: "30%",
+        marginVertical: 10,
+        width: "40%",
         borderRadius: 30,
         borderWidth: 1.5,
         borderColor: RED,

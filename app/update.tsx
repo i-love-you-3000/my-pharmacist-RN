@@ -25,10 +25,10 @@ export default function Update() {
     const router = useRouter();
     const [medicineName, setMedicineName] = useState("");
     const [beforeMeal, setBeforeMeal] = useState(false);
-    const [afterMeal, setAfterMeal] = useState(true);
-    const [breakfast, setBreakfast] = useState(true);
-    const [lunch, setLunch] = useState(true);
-    const [dinner, setDinner] = useState(true);
+    const [afterMeal, setAfterMeal] = useState(false);
+    const [breakfast, setBreakfast] = useState(false);
+    const [lunch, setLunch] = useState(false);
+    const [dinner, setDinner] = useState(false);
     const [manufactureTime, setManufactureTime] = useState(new Date(Date.now()));
     const params = useLocalSearchParams();
     const [manufactureTimePicker, setManufactureTimePicker] = useState(false);
@@ -36,11 +36,15 @@ export default function Update() {
     const [intakePeriod, setIntakePeriod] = useState("");
     const getMedicineInfo = async () => {
         await axios
-            .get("http://172.20.10.13:5000/app/prescription/detail", {
-                params: { id: params.id, itemSeq: params.itemSeq, registerDate: params.registerDate },
+            .post("http://172.20.10.13:5000/app/prescription/detail", {
+                id: params.id,
+                itemSeq: params.itemSeq,
+                registerDate: params.registerDate,
             })
             .then((res) => {
                 setMedicineName(res.data.itemName);
+                console.log(res.data.breakfast);
+
                 setBreakfast(res.data.breakfast);
                 setLunch(res.data.lunch);
                 setDinner(res.data.dinner);
@@ -66,7 +70,6 @@ export default function Update() {
             .post("http://172.20.10.13:5000/app/prescription/update", {
                 id: params.id,
                 itemName: medicineName,
-                registerDate: Date.now(),
                 breakfast: breakfast,
                 lunch: lunch,
                 dinner: dinner,
@@ -75,7 +78,11 @@ export default function Update() {
                 expPeriod: manufactureTime,
             })
             .then((res) => {
-                if (res.data.response) router.back();
+                if (res.data.response)
+                    router.replace({
+                        pathname: "/detail",
+                        params: { id: params.id, itemSeq: params.itemSeq, registerDate: params.registerDate },
+                    });
             });
     };
     useEffect(() => {
@@ -93,6 +100,25 @@ export default function Update() {
             <Stack.Screen
                 options={{
                     title: "수정하기",
+                    headerLeft: () => (
+                        <Pressable
+                            onPress={() => {
+                                router.replace({
+                                    pathname: "/detail",
+                                    params: { id: params.id, itemSeq: params.itemSeq, registerDate: params.registerDate },
+                                });
+                            }}
+                        >
+                            {({ pressed }) => (
+                                <FontAwesome
+                                    name="angle-left"
+                                    size={20}
+                                    color={"white"}
+                                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                                />
+                            )}
+                        </Pressable>
+                    ),
                 }}
             />
             <View style={styles.container}>
