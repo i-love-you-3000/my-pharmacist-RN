@@ -1,13 +1,52 @@
 import { Link, Stack } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import axios from "axios";
+import messaging from '@react-native-firebase/messaging';
 
 export default function Login() {
     const router = useRouter();
     const [loginID, setLoginID] = useState("");
     const [loginPW, setLoginPW] = useState("");
+    const [loginToken, setLoginToken] = useState("");
+
+// Get device token from FCM Server
+    const requestUserPermission = async () => {
+		const authStatus = await messaging().requestPermission();
+		const enabled = 
+			authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+			authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+		if(enabled){
+            const token = await messaging().getToken();
+            setLoginToken(token);
+            console.log(token);
+			console.log('Authorization status:', authStatus);
+		} else {
+            console.log('FCM Authorization failed');
+        }
+    }
+
+    // Background Push Notification Handler
+    useEffect(() => {
+        messaging().getInitialNotification().then(async (remoteMessage) => {
+            if(remoteMessage){
+                console.log('Notification caused app to open from quit state: ', remoteMessage.notification);
+                alert('약 복용 시간입니다' + JSON.stringify(remoteMessage));
+            }
+        });
+
+        messaging().onNotificationOpenedApp(async (remoteMessage) => {
+            console.log('Notification caused app to open from background state: ', remoteMessage.notification);
+            alert('약 복용 시간입니다' + JSON.stringify(remoteMessage));
+        });
+    
+        messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+            console.log('Message handled in the background', remoteMessage);
+            alert('약 복용 시간입니다' + JSON.stringify(remoteMessage));
+        });
+    }, []);
+
     const getLogin = async () => {
         // router.replace({ pathname: "/home", params: { id: loginID } });
         await axios

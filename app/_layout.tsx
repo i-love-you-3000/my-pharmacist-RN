@@ -4,7 +4,9 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { useColorScheme, Text } from "react-native";
+import messaging from '@react-native-firebase/messaging';
 import medicineNameContext from "../components/context";
+
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -16,6 +18,15 @@ export const unstable_settings = {
     initialRouteName: "index",
 };
 SplashScreen.preventAutoHideAsync();
+
+//Forground Message Handler
+useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+        alert('약 복용 시간입니다' + JSON.stringify(remoteMessage));
+    });
+    return unsubscribe;
+}, []);
+
 export default function RootLayout() {
     const [medicineNameFromCamera, setMedicineNameFromCamera] = useState<string>();
     const [loaded, error] = useFonts({
